@@ -55,6 +55,10 @@
   &:hover {
     background-color: rgb(101, 101, 101);
   }
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
 }
 .delete-button {
   background-color: rgb(52, 52, 52);

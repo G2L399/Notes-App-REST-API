@@ -17,8 +17,6 @@ export async function getNotes() {
   const notesData = await fetch("https://notes-api.dicoding.dev/v2/notes")
     .then((response) => response.json())
     .then((data) => {
-      console.log(data);
-
       return data;
     })
     .catch((error) => console.error(error));
@@ -39,17 +37,21 @@ export function saveNotes(notes) {
     .catch((error) => console.error(error));
 }
 
-export function getArchivedNotes() {
+export async function getArchivedNotes() {
   fetch("https://notes-api.dicoding.dev/v2/notes/archived")
     .then((response) => response.json())
-    .then((data) => data)
+    .then((data) => {
+      return data;
+    })
     .catch((error) => console.error(error));
 }
 
-export function getNoteById(id) {
+export async function getNoteById(id) {
   fetch(`https://notes-api.dicoding.dev/v2/notes/${id}`)
     .then((response) => response.json())
-    .then((data) => data)
+    .then((data) => {
+      return data;
+    })
     .catch((error) => console.error(error));
 }
 
@@ -72,11 +74,16 @@ export function unarchiveNote(id) {
 }
 
 export function deleteNote(id) {
+  console.log(id);
+
   fetch(`https://notes-api.dicoding.dev/v2/notes/${id}`, {
     method: "DELETE",
   })
     .then((response) => response.json())
-    .then((data) => data)
+    .then((data) => {
+      this.renderNotes();
+      return data;
+    })
     .catch((error) => console.error(error));
 }
 
@@ -111,7 +118,7 @@ function createNoteCard(note) {
 
   const editButton = createElement(
     "button",
-    { className: "edit-button" },
+    { className: "edit-button", disabled: true },
     "Edit"
   );
   const deleteButton = createElement(

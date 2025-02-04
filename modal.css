@@ -55,6 +55,8 @@
   overflow: auto;
 }
 #viewContent {
+  padding-left: 1rem;
+  padding-right: 1rem;
   font-size: 1.5rem;
   color: white;
   white-space: pre-wrap;
