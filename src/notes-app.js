@@ -15,11 +15,32 @@ class NotesApp extends HTMLElement {
   }
 
   connectedCallback() {
+    const param = new URLSearchParams(window.location.search);
+    const isArchived = param.get("isArchived");
+    let status;
+    console.log(isArchived);
+    isArchived === null ? param.set("isArchived", "false") : (status = false);
+    window.history.replaceState(
+      {},
+      "",
+      `${window.location.pathname}?${param.toString()}`
+    );
+
     this.shadowRoot.innerHTML = ``;
     this.shadowRoot.appendChild(styles);
     this.shadowRoot.appendChild(header);
     this.shadowRoot.appendChild(main);
     this.shadowRoot.appendChild(slot);
+    const archive = this.shadowRoot.getElementById("archive");
+    archive.checked = status;
+    archive.addEventListener("change", () => {
+      window.history.replaceState(
+        {},
+        "",
+        `${window.location.pathname}?isArchived=${archive.checked}`
+      );
+      this.renderNotes(archive.checked);
+    });
     this.main = this.shadowRoot.getElementById("notes");
     this.addButton = this.shadowRoot.querySelector(".addNewNote");
     this.addButton.addEventListener("click", () => {
@@ -35,7 +56,7 @@ class NotesApp extends HTMLElement {
       }
     });
 
-    this.renderNotes();
+    this.renderNotes(status);
   }
 
   showModal() {

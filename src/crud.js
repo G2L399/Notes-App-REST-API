@@ -1,20 +1,25 @@
-export async function renderNotes() {
-  const notes = await getNotes();
+const BASE_URL = "https://notes-api.dicoding.dev/v2/notes";
+
+export async function renderNotes(isArchived) {
+  const notes = await getNotes(isArchived);
   const data = notes.data;
 
-  data.sort(
+  data?.sort(
     (a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime()
   );
 
   this.main.innerHTML = "";
-  data.forEach((note) => {
+  data?.forEach((note) => {
     const card = createNoteCard.call(this, note);
     this.main.appendChild(card);
   });
 }
 
-export async function getNotes() {
-  const notesData = await fetch("https://notes-api.dicoding.dev/v2/notes")
+export async function getNotes(isArchived) {
+  const url = `${BASE_URL}${isArchived ? "/archived" : ""}`;
+  console.log(url);
+
+  const notesData = await fetch(url)
     .then((response) => response.json())
     .then((data) => {
       return data;
@@ -25,7 +30,7 @@ export async function getNotes() {
 }
 
 export function saveNotes(notes) {
-  fetch("https://notes-api.dicoding.dev/v2/notes", {
+  fetch(BASE_URL, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -38,7 +43,7 @@ export function saveNotes(notes) {
 }
 
 export async function getArchivedNotes() {
-  fetch("https://notes-api.dicoding.dev/v2/notes/archived")
+  fetch(BASE_URL + "/archived")
     .then((response) => response.json())
     .then((data) => {
       return data;
@@ -47,7 +52,7 @@ export async function getArchivedNotes() {
 }
 
 export async function getNoteById(id) {
-  fetch(`https://notes-api.dicoding.dev/v2/notes/${id}`)
+  fetch(`${BASE_URL}/${id}`)
     .then((response) => response.json())
     .then((data) => {
       return data;
@@ -56,14 +61,9 @@ export async function getNoteById(id) {
 }
 
 export function editNoteStatus(id, isArchived) {
-  fetch(
-    `https://notes-api.dicoding.dev/v2/notes/${id}/${
-      isArchived ? "unarchive" : "archive"
-    }`,
-    {
-      method: "POST",
-    }
-  )
+  fetch(`${BASE_URL}/${id}/${isArchived ? "unarchive" : "archive"}`, {
+    method: "POST",
+  })
     .then((response) => {
       this.renderNotes();
       return response.json();
@@ -75,7 +75,7 @@ export function editNoteStatus(id, isArchived) {
 export function deleteNote(id) {
   console.log(id);
 
-  fetch(`https://notes-api.dicoding.dev/v2/notes/${id}`, {
+  fetch(`${BASE_URL}/${id}`, {
     method: "DELETE",
   })
     .then((response) => response.json())

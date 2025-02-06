@@ -4,6 +4,9 @@ export const styles = createElement(
   "style",
   {},
   `
+      * {
+        scrollbar-width:none;
+      }
       header {
         display: grid;
         grid-template-columns: 1fr auto;
@@ -27,6 +30,7 @@ export const styles = createElement(
         cursor: pointer;
         font-size: 1rem;
         transition: background-color 0.3s ease;
+        grid-row:span 2;
       }
 
       .addNewNote:hover {
@@ -50,7 +54,7 @@ export const styles = createElement(
           box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
           padding: 1.5rem;
           display: grid;
-          grid-template-rows: minmax(min-content, max-content) 1fr auto auto auto;
+          grid-template-rows: auto 3fr auto auto auto;
           gap: 0.75rem;
           transition: transform 0.3s ease, box-shadow 0.3s ease;
           height: 400px;
@@ -62,6 +66,7 @@ export const styles = createElement(
         }
 
         .note-card h3 {
+            max-height:150px;
           font-size: 1.9rem;
           margin: 0;
           overflow-wrap: break-word;
@@ -124,25 +129,47 @@ export const styles = createElement(
           gap: 1.5rem;
           padding: 2rem;
         }
-      <header>
-        <h1>Notes App</h1>
-        <button class="addNewNote" popovertarget="#modal">Add Notes</button>
-      </header>
-
-      <main id="notes"></main>
-  
-      <slot></slot>
+        .renderBookStatus {
+          margin-left:5px;
+          display:grid;
+          grid-template-columns: auto 1fr;
+          align-items: center;
+        }
+        .renderBookStatus label {
+          font-size: 1.5rem;
+          place-self: start;
+          margin: 0;
+        }
+        .renderBookStatus input {
+          margin: 0;
+          margin-right: 1rem;
+          align-self:center;
+          scale:2;
+        }
     `
 );
 
 export const header = createElement("header");
+const titleandarchived = createElement("div");
 const title = createElement("h1", {}, "Notes App");
+const archivedDIV = createElement("div", { className: "renderBookStatus" });
+titleandarchived.appendChild(title);
+titleandarchived.appendChild(archivedDIV);
 const addNoteButton = createElement(
   "button",
   { className: "addNewNote", popovertarget: "#modal" },
   "Add Notes"
 );
+const checkbox = createElement("input", { type: "checkbox", id: "archive" });
+const label = createElement(
+  "label",
+  { htmlFor: "archive" },
+  "Show Archived Notes?"
+);
+archivedDIV.appendChild(checkbox);
+archivedDIV.appendChild(label);
 export const main = createElement("main", { id: "notes" });
 export const slot = createElement("slot");
 header.appendChild(title);
 header.appendChild(addNoteButton);
+header.appendChild(archivedDIV);

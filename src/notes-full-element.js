@@ -120,9 +120,7 @@ export const styles = createElement(
         transform: scale(1);
       }
     }
-
-
-    `
+`
 );
 
 export const modalParent = createElement("div", {
