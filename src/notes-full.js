@@ -1,4 +1,5 @@
-import { modalParent, styles } from "./notes-full-element.js";
+import { modalParent } from "./notes-full-element.js";
+import { styles } from "./notes-full-element.js";
 
 export class NotesFull extends HTMLElement {
   constructor() {
@@ -8,8 +9,8 @@ export class NotesFull extends HTMLElement {
   connectedCallback() {
     this.shadowRoot.innerHTML = ``;
     this.shadowRoot.appendChild(styles);
-    this.shadowRoot.appendChild(modalParent);
 
+    this.shadowRoot.appendChild(modalParent);
     this.viewModal = this.shadowRoot.getElementById("viewModal");
     this.viewTitle = this.shadowRoot.getElementById("viewTitle");
     this.viewContent = this.shadowRoot.getElementById("viewContent");
