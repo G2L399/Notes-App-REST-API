@@ -2,6 +2,7 @@ import * as notesMethods from "./crud.js";
 import * as handleSubmit from "./handleSubmit.js";
 import { NotesFull } from "./notes-full.js";
 import { NotesModal } from "./notes-modal.js";
+import { styles, header, main, slot } from "./notes-app-element.js";
 
 class NotesApp extends HTMLElement {
   constructor() {
@@ -14,24 +15,14 @@ class NotesApp extends HTMLElement {
   }
 
   connectedCallback() {
-    this.shadowRoot.innerHTML = /*html*/ `
-      <link rel="stylesheet" href="./notes.css" />
-      <header>
-        <h1>Notes App</h1>
-        <button class="addNewNote" popovertarget="#modal">Add Notes</button>
-      </header>
-
-      <main id="notes"></main>
-  
-      <slot></slot>
-    `;
+    this.shadowRoot.innerHTML = ``;
+    this.shadowRoot.appendChild(styles);
+    this.shadowRoot.appendChild(header);
+    this.shadowRoot.appendChild(main);
+    this.shadowRoot.appendChild(slot);
     this.main = this.shadowRoot.getElementById("notes");
-
     this.addButton = this.shadowRoot.querySelector(".addNewNote");
-
     this.addButton.addEventListener("click", () => {
-      console.log(this.notesModal, this.notesFull);
-
       this.notesModal.modalTitle.textContent = "Add New Note";
       this.showModal();
       this.notesModal.form.reset();

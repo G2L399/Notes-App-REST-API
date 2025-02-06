@@ -55,21 +55,20 @@ export async function getNoteById(id) {
     .catch((error) => console.error(error));
 }
 
-export function archiveNote(id) {
-  fetch(`https://notes-api.dicoding.dev/v2/notes/${id}/archive`, {
-    method: "POST",
-  })
-    .then((response) => response.json())
-    .then((data) => data)
-    .catch((error) => console.error(error));
-}
-
-export function unarchiveNote(id) {
-  fetch(`https://notes-api.dicoding.dev/v2/notes/${id}/unarchive`, {
-    method: "POST",
-  })
-    .then((response) => response.json())
-    .then((data) => data)
+export function editNoteStatus(id, isArchived) {
+  fetch(
+    `https://notes-api.dicoding.dev/v2/notes/${id}/${
+      isArchived ? "unarchive" : "archive"
+    }`,
+    {
+      method: "POST",
+    }
+  )
+    .then((response) => {
+      this.renderNotes();
+      return response.json();
+    })
+    .then((data) => console.log(data))
     .catch((error) => console.error(error));
 }
 
@@ -118,8 +117,8 @@ function createNoteCard(note) {
 
   const editButton = createElement(
     "button",
-    { className: "edit-button", disabled: true },
-    "Edit"
+    { className: "edit-button" },
+    `${note.archived ? "Unarchive" : "Archive"}`
   );
   const deleteButton = createElement(
     "button",
@@ -146,8 +145,9 @@ function createNoteCard(note) {
 
   editButton.addEventListener("click", (event) => {
     event.stopPropagation();
+    console.log(note);
 
-    this.editNote(note.id);
+    this.editNoteStatus(note.id, note.archived);
   });
 
   deleteButton.addEventListener("click", (event) => {
