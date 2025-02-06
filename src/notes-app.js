@@ -19,7 +19,14 @@ class NotesApp extends HTMLElement {
     const isArchived = param.get("isArchived");
     let status;
     console.log(isArchived);
-    isArchived === null ? param.set("isArchived", "false") : (status = false);
+
+    if (!isArchived) {
+      param.set("isArchived", "false");
+      status = false;
+    } else {
+      isArchived === "true" ? (status = true) : (status = false);
+      console.log(status);
+    }
     window.history.replaceState(
       {},
       "",
@@ -32,14 +39,21 @@ class NotesApp extends HTMLElement {
     this.shadowRoot.appendChild(main);
     this.shadowRoot.appendChild(slot);
     const archive = this.shadowRoot.getElementById("archive");
+    const archiveLabel = this.shadowRoot.getElementById("archiveLabel");
     archive.checked = status;
+    archiveLabel.textContent = archive.checked
+      ? "Currently Showing Archived Notes"
+      : "Currently Showing Unarchived Notes";
     archive.addEventListener("change", () => {
       window.history.replaceState(
         {},
         "",
         `${window.location.pathname}?isArchived=${archive.checked}`
       );
-      this.renderNotes(archive.checked);
+      this.renderNotes();
+      archiveLabel.textContent = status
+        ? "Currently Showing Archived Notes"
+        : "Currently Showing Unarchived Notes";
     });
     this.main = this.shadowRoot.getElementById("notes");
     this.addButton = this.shadowRoot.querySelector(".addNewNote");
@@ -56,7 +70,7 @@ class NotesApp extends HTMLElement {
       }
     });
 
-    this.renderNotes(status);
+    this.renderNotes();
   }
 
   showModal() {

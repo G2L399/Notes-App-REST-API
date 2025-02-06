@@ -1,7 +1,13 @@
 const BASE_URL = "https://notes-api.dicoding.dev/v2/notes";
 
-export async function renderNotes(isArchived) {
-  const notes = await getNotes(isArchived);
+export async function renderNotes() {
+  const param = new URLSearchParams(window.location.search);
+  const archived = param.get("isArchived");
+  console.log("tikfang toksheng", archived);
+  let status;
+  archived === "true" ? (status = true) : (status = false);
+
+  const notes = await getNotes(status);
   const data = notes.data;
 
   data?.sort(

@@ -130,7 +130,6 @@ export const styles = createElement(
           padding: 2rem;
         }
         .renderBookStatus {
-          margin-left:5px;
           display:grid;
           grid-template-columns: auto 1fr;
           align-items: center;
@@ -139,12 +138,15 @@ export const styles = createElement(
           font-size: 1.5rem;
           place-self: start;
           margin: 0;
+          color: rgb(210, 210, 210);
+          cursor: pointer;
+          &:hover {
+            color: white;
+            text-decoration: underline;
+          }
         }
         .renderBookStatus input {
-          margin: 0;
-          margin-right: 1rem;
-          align-self:center;
-          scale:2;
+          display:none;
         }
     `
 );
@@ -163,7 +165,7 @@ const addNoteButton = createElement(
 const checkbox = createElement("input", { type: "checkbox", id: "archive" });
 const label = createElement(
   "label",
-  { htmlFor: "archive" },
+  { htmlFor: "archive", id: "archiveLabel" },
   "Show Archived Notes?"
 );
 archivedDIV.appendChild(checkbox);
