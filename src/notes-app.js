@@ -38,12 +38,13 @@ class NotesApp extends HTMLElement {
     this.shadowRoot.appendChild(header);
     this.shadowRoot.appendChild(main);
     this.shadowRoot.appendChild(slot);
+
     const archive = this.shadowRoot.getElementById("archive");
     const archiveLabel = this.shadowRoot.getElementById("archiveLabel");
     archive.checked = status;
-    archiveLabel.textContent = archive.checked
-      ? "Currently Showing Archived Notes"
-      : "Currently Showing Unarchived Notes";
+    archiveLabel.textContent = `Currently Showing ${
+      status ? "Archived" : "Unarchived"
+    } Notes. Click Me To Change`;
     archive.addEventListener("change", () => {
       window.history.replaceState(
         {},
@@ -51,10 +52,11 @@ class NotesApp extends HTMLElement {
         `${window.location.pathname}?isArchived=${archive.checked}`
       );
       this.renderNotes();
-      archiveLabel.textContent = status
-        ? "Currently Showing Archived Notes"
-        : "Currently Showing Unarchived Notes";
+      archiveLabel.textContent = `Currently Showing ${
+        status ? "Archived" : "Unarchived"
+      } Notes. Click Me To Change`;
     });
+
     this.main = this.shadowRoot.getElementById("notes");
     this.addButton = this.shadowRoot.querySelector(".addNewNote");
     this.addButton.addEventListener("click", () => {
