@@ -113,7 +113,7 @@ export const styles = createElement(
     @keyframes fadeInUp {
       from {
         opacity: 0;
-        transform: scale(0.74);
+        transform: scale(0.75);
       }
       to {
         opacity: 1;

@@ -12,13 +12,17 @@ class NotesApp extends HTMLElement {
 
     this.attachShadow({ mode: "open" });
     this.editingId = null;
+    this.loading = false;
   }
 
   connectedCallback() {
+    this.initComponent();
+  }
+
+  async initComponent() {
     const param = new URLSearchParams(window.location.search);
     const isArchived = param.get("isArchived");
     let status;
-    console.log(isArchived);
 
     if (!isArchived) {
       param.set("isArchived", "false");
@@ -39,26 +43,31 @@ class NotesApp extends HTMLElement {
     this.shadowRoot.appendChild(main);
     this.shadowRoot.appendChild(slot);
 
-    const archive = this.shadowRoot.getElementById("archive");
-    const archiveLabel = this.shadowRoot.getElementById("archiveLabel");
-    archive.checked = status;
-    archiveLabel.textContent = `Currently Showing ${
+    this.main = this.shadowRoot.getElementById("notes");
+    await this.renderNotes();
+    this.addButton = this.shadowRoot.querySelector(".addNewNote");
+    this.archive = this.shadowRoot.getElementById("archive");
+    this.archiveLabel = this.shadowRoot.getElementById("archiveLabel");
+    this.archive.checked = status;
+    this.archiveLabel.textContent = `Currently Showing ${
       status ? "Archived" : "Unarchived"
-    } Notes. Click Me To Change`;
-    archive.addEventListener("change", () => {
+    } Notes. Click Me To Change `;
+    this.archive.addEventListener("change", async () => {
+      this.changeLoading();
       window.history.replaceState(
         {},
         "",
-        `${window.location.pathname}?isArchived=${archive.checked}`
+        `${window.location.pathname}?isArchived=${this.archive.checked}`
       );
-      this.renderNotes();
-      archiveLabel.textContent = `Currently Showing ${
-        status ? "Archived" : "Unarchived"
+      await this.renderNotes();
+      this.deleteButton = this.shadowRoot.querySelectorAll(".delete-button");
+
+      this.archiveLabel.textContent = `Currently Showing ${
+        this.archive.checked ? "Archived" : "Unarchived"
       } Notes. Click Me To Change`;
+      this.changeLoading();
     });
 
-    this.main = this.shadowRoot.getElementById("notes");
-    this.addButton = this.shadowRoot.querySelector(".addNewNote");
     this.addButton.addEventListener("click", () => {
       this.notesModal.modalTitle.textContent = "Add New Note";
       this.showModal();
@@ -71,10 +80,19 @@ class NotesApp extends HTMLElement {
         this.editingId = null;
       }
     });
-
-    this.renderNotes();
   }
+  changeLoading() {
+    this.loading = !this.loading;
+    this.archive.disabled = this.loading;
+    this.addButton.disabled = this.loading;
+    const currentDeleteButtons =
+      this.shadowRoot.querySelectorAll(".delete-button");
+    const currentArchiveButtons =
+      this.shadowRoot.querySelectorAll(".edit-button");
 
+    currentArchiveButtons.forEach((button) => (button.disabled = this.loading));
+    currentDeleteButtons.forEach((button) => (button.disabled = this.loading));
+  }
   showModal() {
     this.notesModal.modal.showPopover();
   }

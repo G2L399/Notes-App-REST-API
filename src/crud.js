@@ -3,7 +3,6 @@ const BASE_URL = "https://notes-api.dicoding.dev/v2/notes";
 export async function renderNotes() {
   const param = new URLSearchParams(window.location.search);
   const archived = param.get("isArchived");
-  console.log("tikfang toksheng", archived);
   let status;
   archived === "true" ? (status = true) : (status = false);
 
@@ -67,11 +66,13 @@ export async function getNoteById(id) {
 }
 
 export function editNoteStatus(id, isArchived) {
+  this.changeLoading();
   fetch(`${BASE_URL}/${id}/${isArchived ? "unarchive" : "archive"}`, {
     method: "POST",
   })
-    .then((response) => {
-      this.renderNotes();
+    .then(async (response) => {
+      await this.renderNotes();
+      this.changeLoading();
       return response.json();
     })
     .then((data) => console.log(data))
@@ -79,14 +80,14 @@ export function editNoteStatus(id, isArchived) {
 }
 
 export function deleteNote(id) {
-  console.log(id);
-
+  this.changeLoading();
   fetch(`${BASE_URL}/${id}`, {
     method: "DELETE",
   })
     .then((response) => response.json())
-    .then((data) => {
-      this.renderNotes();
+    .then(async (data) => {
+      await this.renderNotes();
+      this.changeLoading();
       return data;
     })
     .catch((error) => console.error(error));
@@ -128,7 +129,7 @@ function createNoteCard(note) {
   );
   const deleteButton = createElement(
     "button",
-    { className: "delete-button" },
+    { className: "delete-button", id: "deleteButton" },
     "Delete"
   );
   const buttonContainer = createElement(
@@ -151,8 +152,6 @@ function createNoteCard(note) {
 
   editButton.addEventListener("click", (event) => {
     event.stopPropagation();
-    console.log(note);
-
     this.editNoteStatus(note.id, note.archived);
   });
 

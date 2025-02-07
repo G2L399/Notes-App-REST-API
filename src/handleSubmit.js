@@ -2,7 +2,9 @@ export function handleSubmitAdd() {
   const title = this.notesModal.inputTitle.value;
   const content = this.notesModal.inputContent.value;
   const note = { title, body: content };
-
+  this.loading = true;
+  this.notesModal.submitButton.disabled = this.loading;
+  this.notesModal.submitButton.textContent = "Saving...";
   fetch("https://notes-api.dicoding.dev/v2/notes", {
     method: "POST",
     headers: {
@@ -11,12 +13,16 @@ export function handleSubmitAdd() {
     body: JSON.stringify(note),
   })
     .then((response) => response.json())
-    .then((data) => console.log(data))
+    .then((data) => {
+      console.log(data);
+      this.renderNotes();
+      this.loading = false;
+      this.notesModal.submitButton.disabled = this.loading;
+      this.notesModal.submitButton.textContent = "Save";
+      this.notesModal.hideModal();
+      this.notesModal.form.reset();
+    })
     .catch((error) => console.error(error));
-
-  this.renderNotes();
-  this.notesModal.hideModal();
-  this.notesModal.form.reset();
 }
 
 export function handleSubmitEdit() {

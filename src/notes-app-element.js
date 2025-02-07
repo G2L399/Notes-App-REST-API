@@ -14,6 +14,9 @@ export const styles = createElement(
         padding: 1rem 2rem;
         background-color: black;
         color: white;
+        position: sticky;
+        top: 0;
+        z-index: 1;
       }
 
       header h1 {
@@ -31,6 +34,10 @@ export const styles = createElement(
         font-size: 1rem;
         transition: background-color 0.3s ease;
         grid-row:span 2;
+        &:disabled {
+          opacity: 0.5;
+          cursor: not-allowed;
+        }
       }
 
       .addNewNote:hover {
@@ -40,7 +47,7 @@ export const styles = createElement(
       @keyframes fadeInUp {
         from {
           opacity: 0;
-          transform: scale(0.74);
+          transform: scale(0.75);
         }
 
         to {
@@ -116,6 +123,10 @@ export const styles = createElement(
           &:hover {
             background-color: rgb(69, 69, 69);
           }
+          &:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+          }
         }
         .show-full-button {
           background-color: rgb(45, 45, 45);
@@ -145,8 +156,19 @@ export const styles = createElement(
             text-decoration: underline;
           }
         }
+        .renderBookStatus input:disabled ~ label {
+          opacity: 0.5;
+          cursor: not-allowed;
+          &:hover {
+            text-decoration: none !important;
+          }
+        }
         .renderBookStatus input {
           display:none;
+          &:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+          }
         }
     `
 );
@@ -163,11 +185,10 @@ const addNoteButton = createElement(
   "Add Notes"
 );
 const checkbox = createElement("input", { type: "checkbox", id: "archive" });
-const label = createElement(
-  "label",
-  { htmlFor: "archive", id: "archiveLabel" },
-  "Show Archived Notes?"
-);
+const label = createElement("label", {
+  htmlFor: "archive",
+  id: "archiveLabel",
+});
 archivedDIV.appendChild(checkbox);
 archivedDIV.appendChild(label);
 export const main = createElement("main", { id: "notes" });

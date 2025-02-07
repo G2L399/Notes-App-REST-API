@@ -104,23 +104,25 @@ export const styles = createElement(
       cursor: pointer;
       font-size: 1rem;
       transition: background-color 0.3s ease;
-    }
-
-    .submitButton button:hover {
-      background-color: #252f25;
+      &:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+      }
+      &:hover {
+        background-color: #252f25;
+      }
     }
     @keyframes fadeInUp {
-      from {
+        from {
            opacity: 0;
-           transform: scale(0.74);
-            }
+           transform: scale(0.75);
+        }
         to {
             opacity: 1;
             transform: scale(1);
         }
     }
-
-    `
+`
 );
 
 export const modalParent = createElement("div", {

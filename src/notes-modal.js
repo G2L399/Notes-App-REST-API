@@ -1,4 +1,3 @@
-import { createElement } from "./crud.js";
 import { modalParent, styles } from "./notes-modal-element.js";
 
 export class NotesModal extends HTMLElement {
@@ -20,6 +19,9 @@ export class NotesModal extends HTMLElement {
     this.form = this.shadowRoot.getElementById("noteForm");
     this.modalTitle = this.shadowRoot.querySelector(".modal-content header h2");
     this.closeButton = this.shadowRoot.querySelector(".close-button");
+    this.submitButton = this.shadowRoot
+      .querySelector(".submitButton")
+      .querySelector("button");
 
     this.closeButton.addEventListener("click", () => {
       this.editingId = null;
