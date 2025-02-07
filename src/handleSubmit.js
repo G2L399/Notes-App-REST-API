@@ -13,9 +13,9 @@ export function handleSubmitAdd() {
     body: JSON.stringify(note),
   })
     .then((response) => response.json())
-    .then((data) => {
+    .then(async (data) => {
       console.log(data);
-      this.renderNotes();
+      await this.renderNotes();
       this.loading = false;
       this.notesModal.submitButton.disabled = this.loading;
       this.notesModal.submitButton.textContent = "Save";
